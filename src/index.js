@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import {spawn} from 'cross-spawn'
 import commandConvert from './command'
 import varValueConvert from './variable'
@@ -84,6 +86,7 @@ function parseCommand(args) {
 }
 
 function getEnvVars(envSetters) {
+  envSetters = Object.assign({}, getFileEnvVars(), envSetters)
   const envVars = Object.assign({}, process.env)
   if (process.env.APPDATA) {
     envVars.APPDATA = process.env.APPDATA
@@ -92,4 +95,55 @@ function getEnvVars(envSetters) {
     envVars[varName] = varValueConvert(envSetters[varName], varName)
   })
   return envVars
+}
+
+function getFileEnvVars() {
+  // Find the first file with a matching name in the CWD:
+  const FILE_NAMES = ['.env', '.env.json', '.env.js']
+  for (let i = 0; i < FILE_NAMES.length; i++) {
+    const file = path.join(process.cwd(), FILE_NAMES[i])
+    if (fs.existsSync(file)) {
+      return loadEnvFile(file)
+    }
+  }
+
+  return {}
+}
+
+function loadEnvFile(file) {
+  const extname = path.extname(file)
+  if (extname === '.json' || extname === '.js') {
+    return require(file)
+  }
+  const content = fs.readFileSync(file).toString()
+  return content
+    // simply line endings
+    .replace('\r', '')
+    // convert file into lines
+    .split('\n')
+    // trim whitespace
+    .map(line => line.trim())
+    // remove comments
+    .filter(line => line.charAt(0) !== '#')
+    // remove empty lines
+    .filter(line => line)
+    // regex parse lines
+    .map(line => envSetterRegex.exec(line))
+    // filter missed matches
+    .filter(match => match)
+    // convert to hashtable
+    .reduce((env, match) => {
+      let value
+
+      if (typeof match[3] !== 'undefined') {
+        value = match[3]
+      } else if (typeof match[4] === 'undefined') {
+        value = match[5]
+      } else {
+        value = match[4]
+      }
+
+      env[match[1]] = value
+      return env
+    }, {})
 }
