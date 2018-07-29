@@ -1,3 +1,5 @@
+> This is a fork of [Kent C Dodds](https://github.com/kentcdodds/) popular (cross-env)[https://www.npmjs.com/package/cross-env] module. It remains largely unchanged but has support for environment config files, as described below.
+
 <div align="center">
 <h1>cross-env 🔀</h1>
 
@@ -108,6 +110,47 @@ Lastly, if you want to pass a JSON string (e.g., when using [ts-loader]), you ca
 
 Pay special attention to the **triple backslash** `(\\\)` **before** the **double quotes** `(")` and the **absence** of **single quotes** `(')`.
 Both of these conditions have to be met in order to work both on Windows and UNIX.
+
+## Environmental files
+
+Sometimes its tedious to set the same ten-or-so environmental variables in many NPM scripts. If you want to set a number of variables across all scripts, add one of the following files to your project root:
+
+> .env
+
+Files named `.env` will be parsed line by line. Lines beginning in `#` are ignored. For example:
+
+```
+# This is an env file:
+NODE_ENV=production
+MYSQL_USER=root
+MYSQL_PASSWORD=1111
+```
+
+> .env.json
+
+Altneratively, you can have a file called `.env.json`, like so:
+
+```json
+{
+  "NODE_ENV": "production",
+  "MYSQL_USER": "root",
+  "MYSQL_PASSWORD": "1111"
+}
+```
+
+> .env.js
+
+Finally, a commonjs module named `.env.js` may be used:
+
+```js
+module.exports = {
+  "NODE_ENV": "production",
+  "MYSQL_USER": "root",
+  "MYSQL_PASSWORD": "1111"
+}
+```
+
+Note: The first file found will be used and the others will be ignored.
 
 ## `cross-env` vs `cross-env-shell`
 
