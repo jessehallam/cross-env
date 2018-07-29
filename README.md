@@ -1,4 +1,4 @@
-> This is a fork of [Kent C Dodds](https://github.com/kentcdodds/) popular (cross-env)[https://www.npmjs.com/package/cross-env] module. It remains largely unchanged but has support for environment config files, as described below.
+> This is a fork of [Kent C Dodds](https://github.com/kentcdodds/) popular[cross-env](https://www.npmjs.com/package/cross-env) module. It remains largely unchanged but has support for environment config files, as described below.
 
 <div align="center">
 <h1>cross-env 🔀</h1>
