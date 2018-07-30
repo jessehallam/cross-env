@@ -143,7 +143,7 @@ function loadEnvFile(file) {
         value = match[4]
       }
 
-      env[match[1]] = value
+      env[match[1]] = (value || '').toString()
       return env
     }, {})
 }
