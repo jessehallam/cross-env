@@ -86,7 +86,14 @@ function parseCommand(args) {
 }
 
 function getEnvVars(envSetters) {
-  envSetters = Object.assign({}, getFileEnvVars(), envSetters)
+  const fileEnv = getFileEnvVars()
+  Object.keys(fileEnv).forEach(key => {
+    if (fileEnv[key] === null || fileEnv[key] === undefined) {
+      fileEnv[key] = ''
+    }
+    fileEnv[key] = fileEnv[key].toString()
+  })
+  envSetters = Object.assign({}, fileEnv, envSetters)
   const envVars = Object.assign({}, process.env)
   if (process.env.APPDATA) {
     envVars.APPDATA = process.env.APPDATA
@@ -143,7 +150,7 @@ function loadEnvFile(file) {
         value = match[4]
       }
 
-      env[match[1]] = (value || '').toString()
+      env[match[1]] = value
       return env
     }, {})
 }
