@@ -1,6 +1,6 @@
 {
   "name": "cross-env2",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Run scripts that set and use environment variables across platforms",
   "main": "dist/index.js",
   "bin": {
@@ -17,7 +17,9 @@
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
-    "precommit": "kcd-scripts precommit"
+    "precommit": "echo 1",
+    "prepublish": "npm run build",
+    "preversion": "npm run build"
   },
   "files": [
     "dist"
