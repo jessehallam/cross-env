@@ -1,6 +1,6 @@
 {
   "name": "cross-env2",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Run scripts that set and use environment variables across platforms",
   "main": "dist/index.js",
   "bin": {
